@@ -1,0 +1,10 @@
+CIMB Clicks PHP class
+=====================
+This is a simple wrapper class to integrate CIMB Clicks payment gateway (https://www.cimbclicks.com.my) in Malaysia.
+
+Usage
+-----
+Please refer to request.php and response.php for examples.
+Request is for making payment.
+Response is to receive transaction status.
+
