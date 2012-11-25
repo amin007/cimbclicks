@@ -1,6 +1,7 @@
 <?php
 require_once './CimbClicks.class.php';
-$cimbClicks = new CimbClicks('PAYEE_ID');
+$cimbClicks = new CimbClicks('TBPRSBEPAY');
+$cimbClicks->setPaymentMode(CimbClicks::PAYMENT_MODE_DEV);
 ?>
 <!doctype html>
 <html>

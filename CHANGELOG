@@ -1,3 +1,7 @@
 v1.0 - 2012-04-21
 =================
 - Completed CIMB Clicks payment gateway integration PHP class.
+
+v1.1 - 2012-11-25
+=================
+- Implementation of status query.

@@ -5,7 +5,7 @@
  *
  * @author Leow Kah Thong <http://kahthong.com>
  * @copyright Leow Kah Thong 2012
- * @version 1.0
+ * @version 1.1
  */
 class CimbClicks {
 
@@ -16,6 +16,7 @@ class CimbClicks {
 
     private $paymentUrlDev  = 'https://203.153.83.64/TIBSEPWeb/ePayment.do';
     private $paymentUrlProd = 'https://www.cimbclicks.com.my/TIBSEPWeb/ePayment.do';
+    private $statusEnqueryUrl = 'https://www.cimbclicks.com.my/TIBSEPWeb/StatusEnquiry';
     private $payeeId        = '';
     private $paymentMode    = '';
 
@@ -138,6 +139,50 @@ class CimbClicks {
             return $this->paymentUrlDev;
         } else {
             return $this->paymentUrlProd;
+        }
+    }
+
+    /**
+     * Returns the URL to use for status query.
+     *
+     * @access public
+     * @return string CIMB Clicks status query URL.
+     */
+    public function getStatusEnqueryUrl() {
+        return $this->statusEnqueryUrl;
+    }
+
+    /**
+     * Check payment status (Web Status Enquiry).
+     *
+     * @access public
+     * @param array $paymentDetails The following variables are required:
+     * - payeeId
+     * - billAccountNo
+     * - billReferenceNo             - Company/Individual Name
+     * - billReferenceNo2 (Optional) - Co.Regn.No/ICNo.
+     * - billReferenceNo3 (Optional)
+     * - billReferenceNo4 (Optional)
+     * - amount
+     * @return string Possible payment status from CIMB Clicks server:
+     * - S - Success (Transaction has been processed and successful)
+     * - F – Failed (Transaction has been processed and failed)
+     * - U – Unknown (CIMB internal system error. Please treat this as failed. Checking will be done by CIMB to make the necessary reversal, if any)
+     * - D – Transaction not processed
+     */
+    public function getStatusEnquiry($paymentDetails) {
+        $curl = curl_init($this->getStatusEnqueryUrl() . '?' . http_build_query($paymentDetails));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $result = trim(curl_exec($curl));
+        curl_close($curl);
+
+        // Read data returned
+        $result = explode("\n", $result);
+        foreach ($result as $key => $val) {
+          $_temp = explode('=', $val);
+          if ($_temp[0] === 'status') {
+            return trim($_temp[1]);
+          }
         }
     }
 
